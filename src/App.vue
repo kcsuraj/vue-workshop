@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Modal>
+      <p>Goodbye ?</p>
+      <p>Oh no, please. Can't we go back to page one and do it all over again ?</p>
+      <span>- Winnie The Pooh</span>
+    </Modal>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Modal from "./components/Modal.vue";
 
 export default {
   name: "app",
   components: {
-    HelloWorld
+    Modal
   }
 };
 </script>
