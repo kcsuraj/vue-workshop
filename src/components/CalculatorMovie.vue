@@ -6,14 +6,14 @@
       </div>
       <div class="content">
         <div class="form-group">
-          <input type="number" class="form-control" placeholder="First Number" />
+          <input v-model.number='num1' type="number" class="form-control" placeholder="First Number" />
         </div>
         <div class="form-group">
-          <input type="number" class="form-control" placeholder="Second Number" />
+          <input v-model.number='num2' type="number" class="form-control" placeholder="Second Number" />
         </div>
 
-        <div class="form-group">
-          <p>The sum is</p>
+        <div v-if="(num1 && num2) | (num1==0 && num2) | (num2==0 && num1)" class="form-group">
+          <p>The sum is {{num1 + num2}}</p>
         </div>
       </div>
     </div>
@@ -25,14 +25,14 @@
 
       <div class="content">
         <div class="form-group">
-          <select class="form-control">
+          <select v-model="movie" class="form-control">
             <option>Doctor Strange in the Multiverse of Madness</option>
             <option>Thor: Love and Thunder</option>
             <Option>Joker</Option>
           </select>
         </div>
-        <div class="form-group">
-          <p>My most anticipated movie is:</p>
+        <div v-if="movie" class="form-group">
+          <p>My most anticipated movie is: {{movie}}</p>
         </div>
       </div>
     </div>
@@ -40,7 +40,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "CalculatorMovie",  
+  data(){
+    return{
+      num1: '',
+      num2: '',
+      movie: ""
+    };
+  }
+};
 </script>
 
 <style scoped lang="scss">
