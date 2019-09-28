@@ -6,17 +6,23 @@
           <img src="../assets/ts.jpg" alt="Profile picture" />
         </div>
         <div class="comment__content">
-          <ul class="comment-list">
-            <li>
-              <span></span>
+          <ul v-if="comments.length" class="comment-list">
+            <li v-for="(item, index) in comments" :key="index">
+              <span>{{item}}</span>
             </li>
           </ul>
-          <div class="no-comments">
+          <div v-else class="no-comments">
             <p>No comments added yet</p>
           </div>
         </div>
         <div class="comment-box">
-          <textarea class="form-control" rows="3" placeholder="Write a comment"></textarea>
+          <textarea
+            @keyup.enter="addComment"
+            v-model="newComment"
+            class="form-control"
+            rows="3"
+            placeholder="Write a comment"
+          ></textarea>
         </div>
       </div>
     </div>
@@ -25,7 +31,19 @@
 
 <script>
 export default {
-  name: "PhotoComment"
+  name: "PhotoComment",
+  data: function() {
+    return {
+      newComment: "",
+      comments: []
+    };
+  },
+  methods: {
+    addComment() {
+      this.comments.push(this.newComment);
+      this.newComment = "";
+    }
+  }
 };
 </script>
 
@@ -70,5 +88,11 @@ export default {
       padding: 12px;
     }
   }
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 18px;
 }
 </style>
