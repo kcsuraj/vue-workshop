@@ -35,14 +35,14 @@
 
       <div class="content">
         <div class="form-group">
-          <select v-model="movie" class="form-control">
+          <select v-model="movieName" class="form-control">
             <option>Doctor Strange in the Multiverse of Madness</option>
             <option>Thor: Love and Thunder</option>
             <Option>Joker</Option>
           </select>
         </div>
-        <div v-if="movie" class="form-group">
-          <p>My most anticipated movie is: {{movie}}</p>
+        <div class="form-group">
+          <p v-if="movieName">My most anticipated movie is: {{movieName}}</p>
         </div>
       </div>
     </div>
@@ -52,16 +52,17 @@
 <script>
 export default {
   name: "CalculatorMovie",
-  data() {
+  data: function() {
     return {
       num1: 0,
       num2: 0,
-      movie: ""
+      movieName: ""
     };
   }
 };
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .container {
   margin: 0 auto;
