@@ -1,31 +1,11 @@
 <template>
   <div class="container">
     <div class="card">
-      <div class="heading">
-        <h4 class="title">Register to create a new account</h4>
-      </div>
+      <slot name="form-header"></slot>
       <div class="content">
-        <form>
-          <div class="form-group">
-            <label class="label" for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="name" required />
-          </div>
-          <div class="form-group">
-            <label class="label" for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="email" required />
-          </div>
-          <div class="form-group">
-            <label class="label" for="password">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="password"
-              required
-            />
-          </div>
-
-          <button type="submit" class="btn">Submit</button>
+        <form @submit.prevent="save">
+          <slot name="form-fields" :error="error"></slot>
+          <slot name="submit"></slot>
         </form>
       </div>
     </div>
@@ -33,8 +13,26 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: "RegistrationForm"
+  name: "FormComponent",
+
+  props: ["fields", "endpoint"],
+  data: function() {
+    return {
+      error: null
+    };
+  },
+  methods: {
+    async save() {
+      try {
+        const response = await axios.post(this.endpoint, this.fields);
+        this.$emit("success", response.data);
+      } catch (error) {
+        this.error = error.message;
+      }
+    }
+  }
 };
 </script>
 
@@ -52,18 +50,13 @@ export default {
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   padding: 24px;
 }
-
 .form-group {
-  &:not(:last-child) {
-    margin-bottom: 18px;
-  }
+  margin-bottom: 18px;
 }
-
 .label {
   display: inline-block;
   margin-bottom: 0.5rem;
 }
-
 .form-control {
   display: block;
   width: 100%;
@@ -76,7 +69,6 @@ export default {
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
 }
-
 .btn {
   color: #fff;
   cursor: pointer;
@@ -89,5 +81,14 @@ export default {
     background-color: #0069d9;
     border-color: #0062cc;
   }
+}
+
+.alert {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
 }
 </style>
