@@ -4,26 +4,12 @@
       <div class="heading">
         <h4 class="title">Netflix Ratings</h4>
       </div>
-      <div class="search">
-        <input v-model="title" type="text" class="form-control" placeholder="Search by title" />
-      </div>
+      <search @title="handleTitleChange"></search>
       <div class="content">
         <div v-if="loading">
           <p>Loading news</p>
         </div>
-        <div v-else>
-          <div v-if="error">
-            <p>{{error}}</p>
-          </div>
-          <ul v-else class="list">
-            <li v-for="(news, index) in stories" :key="index">
-              <template v-if="news.title">
-                <a :href="news.url">{{news.title}}</a>
-                <span>By: {{news.author}}</span>
-              </template>
-            </li>
-          </ul>
-        </div>
+        <stories :stories="stories"></stories>
       </div>
     </div>
   </div>
@@ -31,43 +17,43 @@
 
 <script>
 import axios from "axios";
-
+import Search from "./Search";
+import Stories from "./Stories";
 export default {
   name: "HackerNews",
-  data: function() {
+  data() {
     return {
       loading: true,
-      error: null,
-      stories: [],
-      title: ""
+      stories: []
     };
+  },
+  components: {
+    Search,
+    Stories
   },
   created: async function() {
     this.getData();
   },
   methods: {
-    async getData() {
-      this.loading = true;
+    async handleTitleChange(title) {
+      this.getData(title);
+    },
+    async getData(title = "") {
       try {
         const response = await axios.get(
           "http://hn.algolia.com/api/v1/search",
           {
             params: {
-              query: this.title
+              query: title
             }
           }
         );
         this.stories = response.data.hits;
       } catch (error) {
-        this.error = error.message;
+        console.log(error);
       } finally {
         this.loading = false;
       }
-    }
-  },
-  watch: {
-    title: function(value) {
-      this.getData();
     }
   }
 };
@@ -82,24 +68,6 @@ export default {
 .card {
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   padding: 24px;
-}
-
-.list {
-  > li {
-    &:not(:last-child) {
-      margin-bottom: 18px;
-    }
-    > a {
-      color: #0a5b8c;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    > span {
-      color: rgba(#3b4242, 0.7);
-      font-size: 12px;
-    }
-  }
 }
 
 .btn {
@@ -123,19 +91,6 @@ export default {
   .title {
     font-size: 18px;
     font-weight: 600;
-  }
-}
-.search {
-  margin-bottom: 24px;
-  .form-control {
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid #ced4da;
-    border-radius: 0;
-    outline: 0;
-    box-shadow: none;
-    padding: 6px 0;
-    width: 100%;
   }
 }
 </style>
