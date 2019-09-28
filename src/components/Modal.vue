@@ -1,21 +1,37 @@
+<!-- <template v-slot:header>
+   <h1>Here might be a page title</h1>
+</template> -->
+
 <template>
   <div class="container">
     <div class="card">
       <p>Are you awesome ?</p>
       <br />
-      <button class="btn">Yes</button>
+      <button class="btn" @click="toggleModal">Yes</button>
     </div>
 
     <div class="modal" :class="{ active: isModalActive}">
-      <span class="modal__close"></span>
-      <div class="modal__content"></div>
+      <span @click="toggleModal" class="modal__close"></span>
+      <div class="modal__content">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Modal"
+  name: "Modal",
+  data: function() {
+    return {
+      isModalActive: false
+    };
+  },
+  methods: {
+    toggleModal() {
+      this.isModalActive = !this.isModalActive;
+    }
+  }
 };
 </script>
 
