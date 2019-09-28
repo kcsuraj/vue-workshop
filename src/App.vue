@@ -1,6 +1,8 @@
 <template>
 <!-- only one parent inside template so only div -->
   <div id="app">Getting started with Vuejs
+  <div id="app">
+    Getting started with Vuejs
     <hello-world></hello-world>
   </div>
 </template>
@@ -10,6 +12,12 @@ import HelloWorld from "./components/HelloWorld";
 export default {
   name: "app",
   
+
+  data() {
+    return {
+      message: ""
+    };
+  },
   components: {
     HelloWorld
   }
