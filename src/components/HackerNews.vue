@@ -5,20 +5,22 @@
         <h4 class="title">Netflix Ratings</h4>
       </div>
       <div class="search">
-        <input type="text" class="form-control" placeholder="Search by title" />
+        <input v-model="title" type="text" class="form-control" placeholder="Search by title" />
       </div>
       <div class="content">
-        <div>
+        <div v-if="loading">
           <p>Loading news</p>
         </div>
-        <div>
-          <div>
-            <p></p>
+        <div v-else>
+          <div v-if="error">
+            <p>{{error}}</p>
           </div>
-          <ul class="list">
-            <li>
-              <a href></a>
-              <span>By:</span>
+          <ul v-else class="list">
+            <li v-for="(news, index) in stories" :key="index">
+              <template v-if="news.title">
+                <a :href="news.url">{{news.title}}</a>
+                <span>By: {{news.author}}</span>
+              </template>
             </li>
           </ul>
         </div>
@@ -28,8 +30,46 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "HackerNews"
+  name: "HackerNews",
+  data: function() {
+    return {
+      loading: true,
+      error: null,
+      stories: [],
+      title: ""
+    };
+  },
+  created: async function() {
+    this.getData();
+  },
+  methods: {
+    async getData() {
+      this.loading = true;
+      try {
+        const response = await axios.get(
+          "http://hn.algolia.com/api/v1/search",
+          {
+            params: {
+              query: this.title
+            }
+          }
+        );
+        this.stories = response.data.hits;
+      } catch (error) {
+        this.error = error.message;
+      } finally {
+        this.loading = false;
+      }
+    }
+  },
+  watch: {
+    title: function(value) {
+      this.getData();
+    }
+  }
 };
 </script>
 
