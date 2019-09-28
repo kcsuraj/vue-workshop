@@ -5,16 +5,31 @@
         <h4 class="title">Increment or decrement a number</h4>
       </div>
       <div class="content">
-        <button type="button" class="btn">+</button>
-        <span class="counter"></span>
-        <button type="button" class="btn">-</button>
+        <button @click="increment" type="button" class="btn">+</button>
+        <span class="counter">{{counter}}</span>
+        <button @click="decrement" type="button" class="btn">-</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "Counter",
+  data: function() {
+    return {
+      counter: 0
+    };
+  },
+  methods: {
+    increment() {
+      this.counter++;
+    },
+    decrement() {
+      this.counter--;
+    }
+  }
+};
 </script>
 
 
